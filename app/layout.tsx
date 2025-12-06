@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Alp, ML and Learning",
+  title: "Alp, Machine & Human Learning",
   description: "Machine & human learning — research, projects, and writing.",
 };
 
