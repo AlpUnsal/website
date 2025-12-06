@@ -30,7 +30,7 @@ export default function Home() {
           <div className="flex flex-col gap-6">
             <div className="group">
               <div className="flex justify-between items-baseline mb-2">
-                <h3 className="font-medium text-black group-hover:text-neutral-600 transition-colors">ML Research Student</h3>
+                <h3 className="font-medium text-black group-hover:text-neutral-600 transition-colors">Machine Learning Researcher</h3>
                 <span className="text-xs text-neutral-400">Apr 2025 — Present</span>
               </div>
               <p className="text-sm text-neutral-500">Vector Institute & The Hospital for Sick Children</p>
@@ -41,7 +41,7 @@ export default function Home() {
             
             <div className="group">
               <div className="flex justify-between items-baseline mb-2">
-                <h3 className="font-medium text-black group-hover:text-neutral-600 transition-colors">ML Research Student</h3>
+                <h3 className="font-medium text-black group-hover:text-neutral-600 transition-colors">Machine Learning Researcher</h3>
                 <span className="text-xs text-neutral-400">May 2024 — Aug 2024</span>
               </div>
               <p className="text-sm text-neutral-500">University Health Network</p>
