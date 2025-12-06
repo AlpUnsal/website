@@ -36,7 +36,7 @@ export default async function PostPage({ params }: Props) {
           <span className="text-xs text-neutral-400 font-mono">{post.date}</span>
         </header>
 
-        <article className="prose prose-neutral prose-sm max-w-none">
+        <article className="prose prose-neutral prose-sm max-w-none font-sans">
           <div 
             className="text-neutral-700 leading-relaxed whitespace-pre-line [&_a]:text-black [&_a]:underline [&_a]:underline-offset-2 [&_a]:hover:text-neutral-600"
             dangerouslySetInnerHTML={{ __html: post.content }}

@@ -16,8 +16,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Alex Rivera | Digital Designer & Developer",
-  description: "Digital Designer & Developer crafting thoughtful experiences.",
+  title: "Alp, ML and Learning",
+  description: "Machine & human learning — research, projects, and writing.",
 };
 
 export default function RootLayout({
