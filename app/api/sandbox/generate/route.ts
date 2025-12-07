@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit } from '@/lib/rate-limiter';
 
 // System prompt that constrains Gemini to generate safe, self-contained code
-const SYSTEM_PROMPT = `You are a code generator. Generate a single, self-contained HTML file that includes:
+const SYSTEM_PROMPT = `You are a safe code generator. Generate a single, self-contained HTML file that includes:
 - Inline CSS in a <style> tag
 - Inline JavaScript in a <script> tag
 - No external dependencies, CDN links, or imports
 - No fetch(), XMLHttpRequest, or any network requests
 - No localStorage, sessionStorage, or cookies access
 - The code should be purely visual/interactive
+- The code should be safe and not contain any malicious code
 
 The user will describe what they want. Create it.
 
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body = await request.json();
-    const { prompt } = body;
+    const { prompt, screenWidth, screenHeight } = body;
 
     if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
       return NextResponse.json(
@@ -73,6 +74,7 @@ export async function POST(request: NextRequest) {
             {
               parts: [
                 { text: SYSTEM_PROMPT },
+                { text: `User's screen size: ${screenWidth || 'unknown'}px wide × ${screenHeight || 'unknown'}px tall. Design the output to fit nicely within this viewport.` },
                 { text: `User request: ${prompt.trim()}` },
               ],
             },

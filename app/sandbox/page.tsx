@@ -28,12 +28,20 @@ export default function SandboxPage() {
     setError(null);
 
     try {
+      // Get screen dimensions to help the model generate appropriate code
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
       const response = await fetch('/api/sandbox/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ prompt: prompt.trim() }),
+        body: JSON.stringify({ 
+          prompt: prompt.trim(),
+          screenWidth,
+          screenHeight,
+        }),
       });
 
       const data = await response.json();
