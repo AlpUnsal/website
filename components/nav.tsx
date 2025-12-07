@@ -7,6 +7,7 @@ const navItems = [
   { name: 'Home', path: '/' },
   { name: 'Projects', path: '/projects' },
   { name: 'Writing', path: '/writing' },
+  { name: 'Sandbox', path: '/sandbox' },
 ];
 
 export function Nav() {
