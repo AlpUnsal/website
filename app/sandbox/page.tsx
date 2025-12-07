@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, FormEvent, useEffect, useRef, useCallback } from 'react';
 import { SandboxRenderer } from '@/components/sandbox-renderer';
 import { Nav } from '@/components/nav';
 import { getGreeting } from '@/content/sandbox-greetings';
+import { SandboxParticles } from '@/components/sandbox-particles';
 
 type PageState = 'input' | 'loading' | 'result' | 'error';
 
@@ -13,11 +14,36 @@ export default function SandboxPage() {
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [greeting, setGreeting] = useState<string>('');
+  const [particlesActive, setParticlesActive] = useState(false);
+  const [sandTriggered, setSandTriggered] = useState(false);
+  const [letterRects, setLetterRects] = useState<DOMRect[]>([]);
+  const inputBoxRef = useRef<HTMLInputElement>(null);
+  const letterSpansRef = useRef<(HTMLSpanElement | null)[]>([]);
 
   // Set greeting on client-side to avoid hydration mismatch
   useEffect(() => {
     setGreeting(getGreeting());
+    // Start particles after a short delay
+    const timer = setTimeout(() => setParticlesActive(true), 300);
+    return () => clearTimeout(timer);
   }, []);
+
+  // Update letter rects when greeting changes or on resize
+  const updateLetterRects = useCallback(() => {
+    const rects = letterSpansRef.current
+      .filter((span): span is HTMLSpanElement => span !== null)
+      .map(span => span.getBoundingClientRect());
+    setLetterRects(rects);
+  }, []);
+
+  useEffect(() => {
+    if (greeting) {
+      // Delay to ensure spans are rendered
+      setTimeout(updateLetterRects, 50);
+      window.addEventListener('resize', updateLetterRects);
+      return () => window.removeEventListener('resize', updateLetterRects);
+    }
+  }, [greeting, updateLetterRects]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -74,18 +100,28 @@ export default function SandboxPage() {
   // Show the input form (initial, loading, or error states)
   return (
     <div className="min-h-screen max-w-2xl mx-auto px-6 font-sans flex flex-col">
+      <SandboxParticles inputBoxRef={inputBoxRef} letterRects={letterRects} isActive={particlesActive} sandTriggered={sandTriggered} />
       <Nav />
       <div className="flex-1 flex flex-col items-center justify-center pb-32">
-        {/* Greeting text - outside the container so it can expand full width */}
+        {/* Greeting text - split into individual character spans for collision */}
         {greeting && (
           <h1 className="text-5xl font-light text-center text-neutral-400 mb-8 whitespace-nowrap">
-            {greeting}
+            {greeting.split('').map((char, i) => (
+              <span
+                key={i}
+                ref={el => { letterSpansRef.current[i] = el; }}
+                style={{ display: char === ' ' ? 'inline' : 'inline-block' }}
+              >
+                {char === ' ' ? '\u00A0' : char}
+              </span>
+            ))}
           </h1>
         )}
         <div className="w-full max-w-xl">
           <form onSubmit={handleSubmit} className="w-full">
             <div className="relative">
               <input
+                ref={inputBoxRef}
                 type="text"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
@@ -98,7 +134,7 @@ export default function SandboxPage() {
                          focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:border-transparent
                          disabled:opacity-50 disabled:cursor-not-allowed
                          transition-all duration-200"
-                autoFocus
+                onFocus={() => setSandTriggered(true)}
               />
               
               {/* Loading indicator inside input */}
