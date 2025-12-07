@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import { useParticles } from "./particle-context";
 
 interface Triangle {
   x: number;
@@ -10,6 +11,7 @@ interface Triangle {
 }
 
 export function TriangleBackground() {
+  const { particlesVisible } = useParticles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const trianglesRef = useRef<Triangle[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
@@ -141,8 +143,8 @@ export function TriangleBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: -1 }}
+      className="fixed inset-0 pointer-events-none transition-opacity duration-500"
+      style={{ zIndex: -1, opacity: particlesVisible ? 1 : 0 }}
     />
   );
 }

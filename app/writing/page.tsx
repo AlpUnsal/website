@@ -1,12 +1,10 @@
 import { Nav } from "@/components/nav";
 import Link from "next/link";
-import { FollowingBackground } from "@/components/following-background";
 import { posts } from "@/content/posts";
 
 export default function Writing() {
   return (
     <div className="min-h-screen max-w-2xl mx-auto px-6 font-sans">
-      <FollowingBackground />
       <Nav />
       
       <main className="pb-20">

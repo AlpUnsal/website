@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
+import { useParticles } from "./particle-context";
 
 interface Particle {
   x: number;
@@ -12,6 +13,7 @@ interface Particle {
 }
 
 export function FollowingBackground() {
+  const { particlesVisible } = useParticles();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: -1000, y: -1000 });
@@ -154,8 +156,8 @@ export function FollowingBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: -1 }}
+      className="fixed inset-0 pointer-events-none transition-opacity duration-500"
+      style={{ zIndex: -1, opacity: particlesVisible ? 1 : 0 }}
     />
   );
 }

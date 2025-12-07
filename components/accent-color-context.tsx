@@ -12,6 +12,7 @@ const CALM_COLORS = [
   "#a3927e", // muted bronze
   "#8fa3b1", // steel blue
   "#b5a897", // sand
+  "#b07d7d", // muted terracotta red
 ];
 
 function getRandomColor(excludeColor?: string): string {
