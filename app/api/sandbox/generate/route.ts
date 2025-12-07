@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     if (!generatedCode) {
       return NextResponse.json(
-        { success: false, code: null, error: 'No code generated. Please try a different prompt.' },
+        { success: false, code: null, error: 'The model isn\'t that good yet, lets relax...' },
         { status: 500 }
       );
     }
