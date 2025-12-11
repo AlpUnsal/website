@@ -3,7 +3,7 @@
 import { useState, FormEvent, useEffect, useRef, useCallback } from 'react';
 import { SandboxRenderer } from '@/components/sandbox-renderer';
 import { Nav } from '@/components/nav';
-import { getGreeting } from '@/content/sandbox-greetings';
+import { getGreeting, getPlaceholderQuery } from '@/content/sandbox-greetings';
 import { SandboxParticles } from '@/components/sandbox-particles';
 
 type PageState = 'input' | 'loading' | 'result' | 'error';
@@ -14,6 +14,7 @@ export default function SandboxPage() {
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [greeting, setGreeting] = useState<string>('');
+  const [placeholder, setPlaceholder] = useState<string>('');
   const [particlesActive, setParticlesActive] = useState(false);
   const [sandTriggered, setSandTriggered] = useState(false);
   const [letterRects, setLetterRects] = useState<DOMRect[]>([]);
@@ -23,6 +24,7 @@ export default function SandboxPage() {
   // Set greeting on client-side to avoid hydration mismatch
   useEffect(() => {
     setGreeting(getGreeting());
+    setPlaceholder(getPlaceholderQuery());
     // Start particles after a short delay
     const timer = setTimeout(() => setParticlesActive(true), 300);
     return () => clearTimeout(timer);
@@ -125,7 +127,7 @@ export default function SandboxPage() {
                 type="text"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Describe what you want to create..."
+                placeholder={placeholder || 'Describe what you want to create...'}
                 disabled={pageState === 'loading'}
                 className="w-full px-6 py-4 text-base font-sans
                          bg-[var(--background)] border border-neutral-300

@@ -43,6 +43,31 @@ export function getTimeOfDay(hour: number): TimeOfDay {
   return "night";
 }
 
+// Placeholder queries for the input box
+// Rotate based on time of day to match the greeting above
+export const placeholderQueries = {
+  morning: [
+    "Make me a fun game to play",
+    "Draw a beautiful landscape",
+    "Make me a meme",
+  ],
+  afternoon: [
+    "Make me a meme",
+    "Draw a beautiful landscape",
+    "Make me a fun game to play",
+  ],
+  evening: [
+    "Make me a meme",
+    "Draw a beautiful landscape",
+    "Make me a fun game to play",
+  ],
+  night: [
+    "Make me a meme",
+    "Draw a beautiful landscape",
+    "Make me a fun game to play",
+  ],
+};
+
 export function getGreeting(): string {
   const now = new Date();
   const hour = now.getHours();
@@ -57,4 +82,20 @@ export function getGreeting(): string {
   const index = dayOfYear % messages.length;
   
   return messages[index];
+}
+
+export function getPlaceholderQuery(): string {
+  const now = new Date();
+  const hour = now.getHours();
+  const timeOfDay = getTimeOfDay(hour);
+  
+  // Use day of year to rotate through queries (10 per time period)
+  const startOfYear = new Date(now.getFullYear(), 0, 0);
+  const diff = now.getTime() - startOfYear.getTime();
+  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  
+  const queries = placeholderQueries[timeOfDay];
+  const index = dayOfYear % queries.length;
+  
+  return queries[index];
 }

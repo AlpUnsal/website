@@ -61,38 +61,77 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call Gemini API
-    const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                { text: SYSTEM_PROMPT },
-                { text: `User's screen size: ${screenWidth || 'unknown'}px wide × ${screenHeight || 'unknown'}px tall. Design the output to fit nicely within this viewport.` },
-                { text: `User request: ${prompt.trim()}` },
-              ],
-            },
+    // Models to try in order of preference
+    const models = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+    
+    const requestBody = JSON.stringify({
+      contents: [
+        {
+          parts: [
+            { text: SYSTEM_PROMPT },
+            { text: `User's screen size: ${screenWidth || 'unknown'}px wide × ${screenHeight || 'unknown'}px tall. Design the output to fit nicely within this viewport.` },
+            { text: `User request: ${prompt.trim()}` },
           ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 8192,
-          },
-        }),
-      }
-    );
+        },
+      ],
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 8192,
+      },
+    });
 
-    if (!geminiResponse.ok) {
-      const errorText = await geminiResponse.text();
-      console.error('Gemini API error:', errorText);
+    let geminiResponse: Response | null = null;
+    let lastError = '';
+
+    // Try each model until one succeeds
+    for (const model of models) {
+      console.log(`Trying model: ${model}`);
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: requestBody,
+        }
+      );
+
+      if (response.ok) {
+        geminiResponse = response;
+        break;
+      }
+
+      // If model is overloaded (503), try the next one
+      if (response.status === 503) {
+        console.log(`the better model is overloaded, trying the worse one`);
+        lastError = await response.text();
+        continue;
+      }
+
+      // If quota exceeded (429), show friendly message
+      if (response.status === 429) {
+        console.error('Gemini API quota exceeded');
+        return NextResponse.json(
+          { success: false, code: null, error: 'uh oh looks like i ran out of api usage' },
+          { status: 429 }
+        );
+      }
+
+      // For other errors, return immediately
+      const errorText = await response.text();
+      console.error('Gemini API error:', response.status, errorText);
       return NextResponse.json(
-        { success: false, code: null, error: 'Failed to generate code. Please try again.' },
+        { success: false, code: null, error: `something real bad happened... try again later` },
         { status: 500 }
+      );
+    }
+
+    if (!geminiResponse) {
+      console.error('All models failed:', lastError);
+      return NextResponse.json(
+        { success: false, code: null, error: 'models are fried. try again later' },
+        { status: 503 }
       );
     }
 
