@@ -1,4 +1,4 @@
-import { FollowingBackground } from "@/components/following-background";
+import { TriangleBackground } from "@/components/triangle-background";
 
 export default function WritingLayout({
   children,
@@ -7,7 +7,7 @@ export default function WritingLayout({
 }) {
   return (
     <>
-      <FollowingBackground />
+      <TriangleBackground />
       {children}
     </>
   );

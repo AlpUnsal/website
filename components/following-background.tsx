@@ -138,10 +138,23 @@ export function FollowingBackground() {
       mouseRef.current = { x: -1000, y: -1000 };
     };
 
+    const handleClick = (e: MouseEvent) => {
+      const particles = particlesRef.current;
+      particles.forEach((particle) => {
+        const dx = particle.x - e.clientX;
+        const dy = particle.y - e.clientY;
+        const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+        const force = Math.min(800 / distance, 30);
+        particle.vx += (dx / distance) * force;
+        particle.vy += (dy / distance) * force;
+      });
+    };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("click", handleClick);
 
     animationRef.current = requestAnimationFrame(animate);
 
@@ -149,6 +162,7 @@ export function FollowingBackground() {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("click", handleClick);
       cancelAnimationFrame(animationRef.current);
     };
   }, [initParticles, animate]);

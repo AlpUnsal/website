@@ -3,22 +3,29 @@ import { ParticleBackground } from "@/components/particle-background";
 
 const projects = [
   {
-    title: "LiveMock.ai",
+    title: "Axilo",
+    description: "Speed reading app on the App Store using RSVP research to help you read books and research papers faster with strong comprehension.",
+    year: "2026",
+    link: "https://apps.apple.com/ca/app/axilo/id6759132389",
+    tags: ["iOS", "Swift"]
+  },
+  {
+    title: "LiveMock.ai (Acquired)",
     description: "Real-time AI interview simulator for consulting case interviews with 100+ cases and detailed feedback.",
-    year: "2025",
+    year: "2025–2026",
     link: "https://livemock.ai/",
     tags: ["Python", "TypeScript", "Supabase", "Stripe"]
   },
   {
     title: "ReGain",
-    description: "Voice-interactive stroke rehabilitation platform that adapts exercises in real-time.",
+    description: "Voice-interactive stroke rehabilitation platform that adapts exercises in real-time. Built in 24 hours, won 1st at U of T NeuroHack.",
     year: "2025",
     link: "https://github.com/AlpUnsal/ReGain",
     tags: ["Python", "Node.js", "Express", "OpenAI API"]
   },
   {
     title: "SallyAI",
-    description: "AI medical assistant that autonomously calls patients for check-ins and generates clinical summaries.",
+    description: "AI medical assistant that autonomously calls patients for check-ins and generates clinical summaries. Built in 6 hours, won 1st at York AI in Healthcare.",
     year: "2025",
     link: "https://github.com/AlpUnsal/SallyAI",
     tags: ["Python", "FastAPI", "Twilio", "OpenAI API"]

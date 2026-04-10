@@ -7,6 +7,52 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    title: "Continuous Experiences",
+    date: "09.04.26",
+    slug: "continuous-experiences",
+    content: `
+imagine coming back to a conversation with chatgpt from 2023.
+
+it wouldn't even question it.
+
+models live in this discrete timeline.
+
+each time you send a prompt, the agent starts operating
+
+until it finishes its task and waits until the next prompt.
+
+in between one prompt and another is nothing, at least for the model.
+
+while yes, we do provide the model with time-stamps, what if this isn't the only thing it needs?
+
+what if our continuous relationship with time provides us with something unique?
+
+something that models today don't have: experience.
+
+for us, experience shapes who we are
+
+and who we are shapes what our new experiences will become.
+
+think of it this way: a neurosurgeon with 20 years of experience and an NBA player with 20 years of experience can walk into the same room and experience two completely different things.
+
+even though the environment is the same
+
+the experience isn't.
+
+the 20 years of divergent experience shapes what their attention focuses on.
+
+this attention shift is what shapes the experiences they have.
+
+yet paradoxically, these very experiences are what make up the person in the first place.
+
+the intricate dance between how you shape your environment and how it shapes you might be part of what makes us feel human.
+
+we can't be certain until we actually achieve fully continuous agents who don't catastrophically forget.
+
+but maybe once we do, then we'll really see the differences (or similarities) between human and artificial intelligence.
+    `.trim()
+  },
+  {
     title: "AI and the Bubble",
     date: "15.10.25",
     slug: "ai-bubble",
